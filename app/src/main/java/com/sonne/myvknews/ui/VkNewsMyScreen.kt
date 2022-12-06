@@ -70,6 +70,6 @@ fun MyScreen() {
             }
         }
     ) {
-
+        CardPost()
     }
 }
