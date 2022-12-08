@@ -14,7 +14,9 @@ import kotlinx.coroutines.launch
 @Preview
 @Composable
 fun MyScreen() {
-    val snackBarHostState = SnackbarHostState()
+    val snackBarHostState = remember {
+        SnackbarHostState()
+    }
     val scope = rememberCoroutineScope()
     val fabIsVisible = remember {
         mutableStateOf(true)
