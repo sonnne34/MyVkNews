@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MyVkNews</string>
+    <string name="description_like">Like</string>
+    <string name="description_comment">Comment</string>
+    <string name="description_share">Share</string>
+    <string name="description_views">Views count</string>
+    <string name="description_content">Content Image</string>
+    <string name="description_more">More</string>
+    <string name="description_avatar">Avatar</string>
+
+    <string name="navigation_item_main">Главная</string>
+    <string name="navigation_item_favorite">Избранное</string>
+    <string name="navigation_item_profile">Профиль</string>
 </resources>
