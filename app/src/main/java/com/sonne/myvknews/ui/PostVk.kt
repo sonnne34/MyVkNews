@@ -22,11 +22,11 @@ import com.sonne.myvknews.R
 import com.sonne.myvknews.ui.theme.MyVkNewsTheme
 
 @Composable
-fun CardPost() {
-    Card {
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ) {
+fun CardPost(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+    ) {
+        Column{
             HeaderPost()
             Spacer(modifier = Modifier.height(8.dp))
             ContentPost()

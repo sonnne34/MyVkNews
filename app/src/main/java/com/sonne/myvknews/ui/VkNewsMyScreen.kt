@@ -1,49 +1,19 @@
 package com.sonne.myvknews.ui
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
 fun MyScreen() {
-    val snackBarHostState = remember {
-        SnackbarHostState()
-    }
-    val scope = rememberCoroutineScope()
-    val fabIsVisible = remember {
-        mutableStateOf(true)
-    }
-
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
-        },
-        floatingActionButton = {
-            if (fabIsVisible.value) {
-                FloatingActionButton(onClick = {
-                    scope.launch {
-                        val action = snackBarHostState.showSnackbar(
-                            message = "I Like it",
-                            actionLabel = "Hide",
-                            duration = SnackbarDuration.Long
-                        )
-                        if (action == SnackbarResult.ActionPerformed) {
-                            fabIsVisible.value = false
-                        }
-                    }
-                }) {
-                    Icon(Icons.Filled.Favorite, contentDescription = null)
-                }
-            }
-        },
         bottomBar = {
             BottomNavigation {
                 val selectedItemPosition = remember {
@@ -72,6 +42,8 @@ fun MyScreen() {
             }
         }
     ) {
-        CardPost()
+        CardPost(
+            modifier = Modifier.padding(8.dp)
+        )
     }
 }
