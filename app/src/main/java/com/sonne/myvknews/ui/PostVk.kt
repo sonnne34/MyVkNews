@@ -27,7 +27,10 @@ import com.sonne.myvknews.domain.StatisticType
 fun CardPost(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onStatisticsClickListener: (StatisticItem) -> Unit
+    onLikeClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit
 ) {
     Card(
         modifier = modifier,
@@ -39,8 +42,11 @@ fun CardPost(
             Spacer(modifier = Modifier.height(8.dp))
             StatisticsPost(
                 statistics = feedPost.statistics,
-                onItemClickListener = onStatisticsClickListener
-                )
+                onLikeClickListener = onLikeClickListener,
+                onShareClickListener = onShareClickListener,
+                onCommentClickListener = onCommentClickListener,
+                onViewsClickListener = onViewsClickListener,
+            )
         }
     }
 }
@@ -92,7 +98,10 @@ private fun ContentPost(feedPost: FeedPost) {
 @Composable
 private fun StatisticsPost(
     statistics: List<StatisticItem>,
-    onItemClickListener: (StatisticItem) -> Unit
+    onLikeClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -106,7 +115,7 @@ private fun StatisticsPost(
                 descriptionImage = R.string.description_views,
                 countText = viewItem.count.toString(),
                 onItemClickListener = {
-                    onItemClickListener(viewItem)
+                    onViewsClickListener(viewItem)
                 }
             )
         }
@@ -120,7 +129,7 @@ private fun StatisticsPost(
                 descriptionImage = R.string.description_share,
                 countText = viewShares.count.toString(),
                 onItemClickListener = {
-                    onItemClickListener(viewShares)
+                    onShareClickListener(viewShares)
                 }
             )
             val viewComments = statistics.getItemByType(StatisticType.COMMENTS)
@@ -129,7 +138,7 @@ private fun StatisticsPost(
                 descriptionImage = R.string.description_comment,
                 countText = viewComments.count.toString(),
                 onItemClickListener = {
-                    onItemClickListener(viewComments)
+                    onCommentClickListener(viewComments)
                 }
             )
             val viewLikes = statistics.getItemByType(StatisticType.LIKES)
@@ -138,7 +147,7 @@ private fun StatisticsPost(
                 descriptionImage = R.string.description_like,
                 countText = viewLikes.count.toString(),
                 onItemClickListener = {
-                    onItemClickListener(viewLikes)
+                    onLikeClickListener(viewLikes)
                 }
             )
         }
