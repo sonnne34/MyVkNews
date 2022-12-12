@@ -35,7 +35,9 @@ fun CardPost(
     Card(
         modifier = modifier,
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(8.dp)
+        ) {
             HeaderPost(feedPost)
             Spacer(modifier = Modifier.height(8.dp))
             ContentPost(feedPost)

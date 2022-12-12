@@ -3,6 +3,7 @@ package com.sonne.myvknews.domain
 import com.sonne.myvknews.R
 
 data class FeedPost(
+    val id: Int = 0,
     val communityName: String = "копатыч",
     val dataPost: String = "14:00",
     val avatarResId: Int = R.drawable.post_comunity_thumbnail,
