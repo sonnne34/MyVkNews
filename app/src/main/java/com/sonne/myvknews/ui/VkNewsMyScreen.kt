@@ -6,19 +6,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.sonne.myvknews.MainViewModel
 import com.sonne.myvknews.domain.navigation.AppNavGraph
-import com.sonne.myvknews.domain.navigation.Screen
+import com.sonne.myvknews.domain.navigation.rememberNavigationState
 
 @Composable
 fun MyScreen(viewModel: MainViewModel) {
-    val navHostController = rememberNavController()
+    val navigationState = rememberNavigationState()
 
     Scaffold(
         bottomBar = {
             BottomNavigation {
-                val navBackStEntry by navHostController.currentBackStackEntryAsState()
+                val navBackStEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRout = navBackStEntry?.destination?.route
 
                 val items = listOf(
@@ -29,13 +28,7 @@ fun MyScreen(viewModel: MainViewModel) {
                 items.forEach { item ->
                     BottomNavigationItem(
                         selected = currentRout == item.screen.route,
-                        onClick = { navHostController.navigate(item.screen.route){
-                            popUpTo(Screen.NewsFeed.route){
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        } },
+                        onClick = { navigationState.navigateTo(item.screen.route) },
                         icon = {
                             Icon(item.icon, contentDescription = null)
                         },
@@ -50,7 +43,7 @@ fun MyScreen(viewModel: MainViewModel) {
         }
     ) { paddingValues ->
 
-        AppNavGraph(navHostController = navHostController,
+        AppNavGraph(navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(viewModel = viewModel,
                     paddingValues = paddingValues)
