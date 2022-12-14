@@ -19,6 +19,7 @@ import com.sonne.myvknews.domain.FeedPost
 fun CommentsPostScreen(
     feedPost: FeedPost,
     comments: List<CommentsPost>,
+    onBackPressed: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -26,7 +27,9 @@ fun CommentsPostScreen(
                 Text(text = "Comments for FeedPost Id: ${feedPost.id}")
             },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {
+                        onBackPressed()
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = null
