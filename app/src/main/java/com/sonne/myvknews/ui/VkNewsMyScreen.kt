@@ -1,18 +1,21 @@
 package com.sonne.myvknews.ui
 
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sonne.myvknews.MainViewModel
+import com.sonne.myvknews.domain.FeedPost
 import com.sonne.myvknews.domain.navigation.AppNavGraph
 import com.sonne.myvknews.domain.navigation.rememberNavigationState
 
 @Composable
-fun MyScreen(viewModel: MainViewModel) {
+fun MyScreen() {
     val navigationState = rememberNavigationState()
+
+    val commentsToPost: MutableState<FeedPost?> = remember {
+        mutableStateOf(null)
+    }
 
     Scaffold(
         bottomBar = {
@@ -43,10 +46,24 @@ fun MyScreen(viewModel: MainViewModel) {
         }
     ) { paddingValues ->
 
-        AppNavGraph(navHostController = navigationState.navHostController,
+        AppNavGraph(
+            navHostController = navigationState.navHostController,
             homeScreenContent = {
-                HomeScreen(viewModel = viewModel,
-                    paddingValues = paddingValues)
+                if (commentsToPost.value == null) {
+                    HomeScreen(
+                        paddingValues = paddingValues,
+                        onCommentClickListener = {
+                            commentsToPost.value = it
+                        }
+                    )
+                } else {
+                    CommentsPostScreen(
+                        onBackPressed = {
+                            commentsToPost.value = null
+                        },
+                        feedPost = commentsToPost.value!!
+                    )
+                }
             },
             profileScreenContent = { Text(text = "Profile", color = Color.Black) },
             favouriteScreenContent = { Text(text = "Favourite", color = Color.Black) })

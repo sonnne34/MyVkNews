@@ -3,7 +3,6 @@ package com.sonne.myvknews
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +16,6 @@ import com.sonne.myvknews.ui.theme.MyVkNewsTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<MainViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,7 +24,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun Screen(){
+    private fun Screen() {
         MyVkNewsTheme {
             Box(
                 modifier = Modifier
@@ -35,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     .background(MaterialTheme.colors.background)
                     .padding(8.dp)
             ) {
-                MyScreen(viewModel)
+                MyScreen()
             }
         }
     }
