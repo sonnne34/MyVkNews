@@ -1,22 +1,18 @@
 package com.sonne.myvknews.ui
 
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sonne.myvknews.domain.FeedPost
-import com.sonne.myvknews.domain.navigation.AppNavGraph
-import com.sonne.myvknews.domain.navigation.rememberNavigationState
+import com.sonne.myvknews.navigation.AppNavGraph
+import com.sonne.myvknews.navigation.rememberNavigationState
 
 @Composable
 fun MyScreen() {
     val navigationState = rememberNavigationState()
-
-    val commentsToPost: MutableState<FeedPost?> = remember {
-        mutableStateOf(null)
-    }
 
     Scaffold(
         bottomBar = {
@@ -61,15 +57,14 @@ fun MyScreen() {
                 HomeScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = {
-                        commentsToPost.value = it
-                        navigationState.navigateToComments()
+                        navigationState.navigateToComments(it)
                     }
                 )
             },
-            commentsScreenContent = {
+            commentsScreenContent = { feedPost ->
                 CommentsPostScreen(
                     onBackPressed = { navigationState.navHostController.popBackStack() },
-                    feedPost = commentsToPost.value!!
+                    feedPost = feedPost
                 )
             },
             profileScreenContent = { Text(text = "Profile", color = Color.Black) },
