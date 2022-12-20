@@ -1,7 +1,6 @@
 package com.sonne.myvknews
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -11,13 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sonne.myvknews.ui.AuthState
+import com.sonne.myvknews.ui.LoginScreen
 import com.sonne.myvknews.ui.MyScreen
 import com.sonne.myvknews.ui.theme.MyVkNewsTheme
 import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKAuthenticationResult
 import com.vk.api.sdk.auth.VKScope
 
 class MainActivity : ComponentActivity() {
@@ -26,22 +27,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyVkNewsTheme {
+                val viewModel: MainViewModel = viewModel()
+                val authState = viewModel.authState.observeAsState(AuthState.Initial)
+
                 val launcher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract()
                 ) {
-                    when (it) {
-                        is VKAuthenticationResult.Success -> {
-                            Log.d("MainActivity", "VKAuthenticationResult.Success")
-                        }
-                        is VKAuthenticationResult.Failed -> {
-                            Log.d("MainActivity", "VKAuthenticationResult.Failed")
+                    viewModel.performAuthResult(it)
+                }
+
+                when (authState.value) {
+                    is AuthState.Authorised -> {
+                        Screen()
+                    }
+                    is AuthState.NotAuthorised -> {
+                        LoginScreen {
+                            launcher.launch(listOf(VKScope.WALL))
                         }
                     }
+                    else -> {
+
+                    }
                 }
-                SideEffect {
-                    launcher.launch(arrayListOf(VKScope.WALL))
-                }
-                Screen()
+
+
             }
         }
     }
