@@ -1,4 +1,4 @@
-package com.sonne.myvknews
+package com.sonne.myvknews.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +14,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sonne.myvknews.ui.AuthState
-import com.sonne.myvknews.ui.LoginScreen
-import com.sonne.myvknews.ui.MyScreen
 import com.sonne.myvknews.ui.theme.MyVkNewsTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope

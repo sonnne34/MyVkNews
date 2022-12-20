@@ -1,4 +1,4 @@
-package com.sonne.myvknews
+package com.sonne.myvknews.presentation.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,9 +1,8 @@
-package com.sonne.myvknews
+package com.sonne.myvknews.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sonne.myvknews.ui.AuthState
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
 

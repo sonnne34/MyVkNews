@@ -1,4 +1,4 @@
-package com.sonne.myvknews.ui.tests_technology
+package com.sonne.myvknews.samples
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

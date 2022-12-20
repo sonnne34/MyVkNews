@@ -1,4 +1,4 @@
-package com.sonne.myvknews.ui
+package com.sonne.myvknews.presentation.news
 
 import com.sonne.myvknews.domain.FeedPost
 

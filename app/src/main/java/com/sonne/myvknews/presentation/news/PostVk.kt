@@ -1,4 +1,4 @@
-package com.sonne.myvknews.ui
+package com.sonne.myvknews.presentation.news
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

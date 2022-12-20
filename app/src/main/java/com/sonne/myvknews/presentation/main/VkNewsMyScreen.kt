@@ -1,4 +1,4 @@
-package com.sonne.myvknews.ui
+package com.sonne.myvknews.presentation.main
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,6 +9,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sonne.myvknews.navigation.AppNavGraph
 import com.sonne.myvknews.navigation.rememberNavigationState
+import com.sonne.myvknews.presentation.comments.CommentsPostScreen
+import com.sonne.myvknews.presentation.news.NewsFeedScreen
 
 @Composable
 fun MyScreen() {
@@ -54,7 +56,7 @@ fun MyScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             feedNewsScreenContent = {
-                HomeScreen(
+                NewsFeedScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = {
                         navigationState.navigateToComments(it)
