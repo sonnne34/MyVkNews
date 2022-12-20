@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">MyVkNews</string>
+
+    <integer name="com_vk_sdk_AppId">51508115</integer>
+
     <string name="description_like">Like</string>
     <string name="description_comment">Comment</string>
     <string name="description_share">Share</string>
