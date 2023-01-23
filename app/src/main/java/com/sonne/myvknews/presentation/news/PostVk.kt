@@ -1,6 +1,5 @@
 package com.sonne.myvknews.presentation.news
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.sonne.myvknews.R
 import com.sonne.myvknews.domain.FeedPost
 import com.sonne.myvknews.domain.StatisticItem
@@ -30,7 +30,7 @@ fun CardPost(
     onLikeClickListener: (StatisticItem) -> Unit,
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
-    onCommentClickListener: (StatisticItem) -> Unit
+    onCommentClickListener: (StatisticItem) -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -59,11 +59,11 @@ private fun HeaderPost(feedPost: FeedPost) {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        AsyncImage(
+            model = feedPost.communityImageUrl,
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = feedPost.avatarResId),
             contentDescription = stringResource(R.string.description_avatar)
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -71,7 +71,7 @@ private fun HeaderPost(feedPost: FeedPost) {
             Text(text = feedPost.communityName)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = feedPost.dataPost,
+                text = feedPost.publicationDate,
                 color = MaterialTheme.colors.onSecondary
             )
         }
@@ -87,11 +87,11 @@ private fun HeaderPost(feedPost: FeedPost) {
 private fun ContentPost(feedPost: FeedPost) {
     Text(text = feedPost.contentText)
     Spacer(modifier = Modifier.height(8.dp))
-    Image(
+    AsyncImage(
+        model = feedPost.contentImageUrl,
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp),
-        painter = painterResource(id = feedPost.contentImageResId),
+            .wrapContentHeight(),
         contentScale = ContentScale.FillWidth,
         contentDescription = stringResource(R.string.description_content)
     )
@@ -103,7 +103,7 @@ private fun StatisticsPost(
     onLikeClickListener: (StatisticItem) -> Unit,
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
-    onCommentClickListener: (StatisticItem) -> Unit
+    onCommentClickListener: (StatisticItem) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -125,7 +125,7 @@ private fun StatisticsPost(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            val viewShares = statistics.getItemByType(StatisticType.SHARES)
+            val viewShares = statistics.getItemByType(StatisticType.REPOSTS)
             IconText(
                 iconResource = R.drawable.ic_share,
                 descriptionImage = R.string.description_share,
@@ -165,7 +165,7 @@ private fun IconText(
     iconResource: Int,
     descriptionImage: Int,
     countText: String,
-    onItemClickListener: () -> Unit
+    onItemClickListener: () -> Unit,
 ) {
     Row(
         modifier = Modifier.clickable {
