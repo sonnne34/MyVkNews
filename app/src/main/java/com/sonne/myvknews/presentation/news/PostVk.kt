@@ -1,4 +1,4 @@
-package com.sonne.myvknews.ui
+package com.sonne.myvknews.presentation.news
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -35,7 +35,9 @@ fun CardPost(
     Card(
         modifier = modifier,
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(8.dp)
+        ) {
             HeaderPost(feedPost)
             Spacer(modifier = Modifier.height(8.dp))
             ContentPost(feedPost)

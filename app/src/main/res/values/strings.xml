@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">MyVkNews</string>
+
+    <integer name="com_vk_sdk_AppId">51508115</integer>
+
     <string name="description_like">Like</string>
     <string name="description_comment">Comment</string>
     <string name="description_share">Share</string>
@@ -11,4 +14,5 @@
     <string name="navigation_item_main">Главная</string>
     <string name="navigation_item_favorite">Избранное</string>
     <string name="navigation_item_profile">Профиль</string>
+    <string name="txt_button_login">Войти</string>
 </resources>
