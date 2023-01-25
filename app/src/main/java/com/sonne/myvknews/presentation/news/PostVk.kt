@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,6 +23,7 @@ import com.sonne.myvknews.R
 import com.sonne.myvknews.domain.FeedPost
 import com.sonne.myvknews.domain.StatisticItem
 import com.sonne.myvknews.domain.StatisticType
+import com.sonne.myvknews.ui.theme.Red
 
 @Composable
 fun CardPost(
@@ -48,6 +50,7 @@ fun CardPost(
                 onShareClickListener = onShareClickListener,
                 onCommentClickListener = onCommentClickListener,
                 onViewsClickListener = onViewsClickListener,
+                isFavourite = feedPost.isFavorite
             )
         }
     }
@@ -104,6 +107,7 @@ private fun StatisticsPost(
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
+    isFavourite: Boolean,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -115,7 +119,7 @@ private fun StatisticsPost(
             IconText(
                 iconResource = R.drawable.ic_views_count,
                 descriptionImage = R.string.description_views,
-                countText = viewItem.count.toString(),
+                countText = formatStatisticCount(viewItem.count),
                 onItemClickListener = {
                     onViewsClickListener(viewItem)
                 }
@@ -129,7 +133,7 @@ private fun StatisticsPost(
             IconText(
                 iconResource = R.drawable.ic_share,
                 descriptionImage = R.string.description_share,
-                countText = viewShares.count.toString(),
+                countText = formatStatisticCount(viewShares.count),
                 onItemClickListener = {
                     onShareClickListener(viewShares)
                 }
@@ -138,21 +142,40 @@ private fun StatisticsPost(
             IconText(
                 iconResource = R.drawable.ic_comment,
                 descriptionImage = R.string.description_comment,
-                countText = viewComments.count.toString(),
+                countText = formatStatisticCount(viewComments.count),
                 onItemClickListener = {
                     onCommentClickListener(viewComments)
                 }
             )
             val viewLikes = statistics.getItemByType(StatisticType.LIKES)
             IconText(
-                iconResource = R.drawable.ic_like,
+                iconResource = if (isFavourite) {
+                    R.drawable.ic_like_set
+                } else {
+                    R.drawable.ic_like
+                },
                 descriptionImage = R.string.description_like,
-                countText = viewLikes.count.toString(),
+                countText = formatStatisticCount(viewLikes.count),
                 onItemClickListener = {
                     onLikeClickListener(viewLikes)
+                },
+                tint = if (isFavourite) {
+                    Red
+                } else {
+                    MaterialTheme.colors.onSecondary
                 }
             )
         }
+    }
+}
+
+private fun formatStatisticCount(count: Int): String {
+    return if (count > 100_000) {
+        String.format("%sK", (count / 1000))
+    } else if (count > 1000) {
+        String.format("%.1fK", (count / 1000f))
+    } else {
+        count.toString()
     }
 }
 
@@ -166,6 +189,7 @@ private fun IconText(
     descriptionImage: Int,
     countText: String,
     onItemClickListener: () -> Unit,
+    tint: Color = MaterialTheme.colors.onSecondary,
 ) {
     Row(
         modifier = Modifier.clickable {
@@ -174,9 +198,10 @@ private fun IconText(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
+            modifier = Modifier.size(20.dp),
             painter = painterResource(id = iconResource),
             contentDescription = stringResource(descriptionImage),
-            tint = MaterialTheme.colors.onSecondary
+            tint = tint
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
