@@ -1,14 +1,14 @@
 package com.sonne.myvknews.data.mapper
 
-import com.sonne.myvknews.data.models.NewsFeesResponseDto
+import android.util.Log
+import com.sonne.myvknews.data.models.NewsFeedResponseDto
 import com.sonne.myvknews.domain.FeedPost
 import com.sonne.myvknews.domain.StatisticItem
 import com.sonne.myvknews.domain.StatisticType
 import kotlin.math.absoluteValue
 
 class NewsFeedMapper {
-
-    fun mapResponseToPosts(responseDto: NewsFeesResponseDto): List<FeedPost> {
+    fun mapResponseToPosts(responseDto: NewsFeedResponseDto): List<FeedPost> {
         val result = mutableListOf<FeedPost>()
 
         val posts = responseDto.newsFeedContent.posts
@@ -16,6 +16,7 @@ class NewsFeedMapper {
 
         for (post in posts) {
             val group = groups.find { it.id == post.communityId.absoluteValue } ?: break
+            Log.d("mapResponseToPosts", "posts = ${post.text}")
             val feedPost = FeedPost(
                 id = post.id,
                 communityName = group.name,

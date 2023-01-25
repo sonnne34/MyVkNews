@@ -22,7 +22,11 @@ class FeedPostViewModel(application: Application) : AndroidViewModel(application
 
     private val mapper = NewsFeedMapper()
 
-    private fun loadNews() {
+    init {
+        loadRecommendations()
+    }
+
+    private fun loadRecommendations() {
         viewModelScope.launch {
             val storage = VKPreferencesKeyValueStorage(getApplication())
             val token = VKAccessToken.restore(storage) ?: return@launch
@@ -32,28 +36,23 @@ class FeedPostViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    init {
-        loadNews()
-    }
-
-    fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
+    fun updateCount(feedPost: FeedPost, item: StatisticItem) {
         val currentState = screenState.value
         if (currentState !is NewsFeedScreenState.Posts) return
 
-        val oldFeedPost = currentState.posts.toMutableList()
+        val oldPosts = currentState.posts.toMutableList()
         val oldStatistics = feedPost.statistics
         val newStatistics = oldStatistics.toMutableList().apply {
             replaceAll { oldItem ->
-                if (oldItem.type == statisticItem.type) {
+                if (oldItem.type == item.type) {
                     oldItem.copy(count = oldItem.count + 1)
                 } else {
                     oldItem
                 }
             }
         }
-
         val newFeedPost = feedPost.copy(statistics = newStatistics)
-        val newPosts = oldFeedPost.apply {
+        val newPosts = oldPosts.apply {
             replaceAll {
                 if (it.id == newFeedPost.id) {
                     newFeedPost
@@ -65,12 +64,12 @@ class FeedPostViewModel(application: Application) : AndroidViewModel(application
         _screenState.value = NewsFeedScreenState.Posts(posts = newPosts)
     }
 
-    fun delete(model: FeedPost) {
+    fun remove(feedPost: FeedPost) {
         val currentState = screenState.value
         if (currentState !is NewsFeedScreenState.Posts) return
 
-        val oldFeedPost = currentState.posts.toMutableList()
-        oldFeedPost.remove(model)
-        _screenState.value = NewsFeedScreenState.Posts(posts = oldFeedPost)
+        val oldPosts = currentState.posts.toMutableList()
+        oldPosts.remove(feedPost)
+        _screenState.value = NewsFeedScreenState.Posts(posts = oldPosts)
     }
 }
