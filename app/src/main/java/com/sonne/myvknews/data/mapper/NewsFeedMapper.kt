@@ -21,6 +21,7 @@ class NewsFeedMapper {
             Log.d("mapResponseToPosts", "posts = ${post.text}")
             val feedPost = FeedPost(
                 id = post.id,
+                communityId = post.communityId,
                 communityName = group.name,
                 publicationDate = mapTimestampToDate(post.date * 1000),
                 communityImageUrl = group.imgUrl,
@@ -32,7 +33,7 @@ class NewsFeedMapper {
                     StatisticItem(type = StatisticType.REPOSTS, post.reposts.count),
                     StatisticItem(type = StatisticType.COMMENTS, post.comments.count)
                 ),
-                isFavorite = post.isFavorite
+                isLiked = post.likes.userLikes > 0
             )
             result.add(feedPost)
         }

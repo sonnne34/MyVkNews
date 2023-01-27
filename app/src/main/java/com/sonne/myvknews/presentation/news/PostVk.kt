@@ -50,7 +50,7 @@ fun CardPost(
                 onShareClickListener = onShareClickListener,
                 onCommentClickListener = onCommentClickListener,
                 onViewsClickListener = onViewsClickListener,
-                isFavourite = feedPost.isFavorite
+                isFavourite = feedPost.isLiked
             )
         }
     }
