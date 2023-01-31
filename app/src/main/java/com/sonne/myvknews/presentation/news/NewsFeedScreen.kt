@@ -82,17 +82,11 @@ private fun FeedPosts(
             ) {
                 CardPost(
                     feedPost = feedPost,
-                    onViewsClickListener = { statisticItem ->
-                        viewModel.updateCount(feedPost, statisticItem)
-                    },
                     onCommentClickListener = {
                         onCommentClickListener(feedPost)
                     },
                     onLikeClickListener = { _ ->
                         viewModel.changeLikeStatus(feedPost)
-                    },
-                    onShareClickListener = { statisticItem ->
-                        viewModel.updateCount(feedPost, statisticItem)
                     }
                 )
             }
