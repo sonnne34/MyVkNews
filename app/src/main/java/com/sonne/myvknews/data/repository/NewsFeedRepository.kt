@@ -22,6 +22,7 @@ class NewsFeedRepository(application: Application) {
         get() = _feedPosts.toList()
 
     private var nextFrom: String? = null
+
     suspend fun loadRecommendations(): List<FeedPost> {
         val startFrom = nextFrom
 
@@ -40,6 +41,15 @@ class NewsFeedRepository(application: Application) {
 
     private fun getAccessToken(): String {
         return token?.accessToken ?: throw IllegalStateException("Token is null")
+    }
+
+    suspend fun deletePost(feedPost: FeedPost) {
+        apiService.ignorePost(
+            token = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        _feedPosts.remove(feedPost)
     }
 
     suspend fun changeLike(feedPost: FeedPost) {
