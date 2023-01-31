@@ -21,11 +21,21 @@ class NewsFeedRepository(application: Application) {
     val feedPosts: List<FeedPost>
         get() = _feedPosts.toList()
 
+    private var nextFrom: String? = null
     suspend fun loadRecommendations(): List<FeedPost> {
-        val response = apiService.loadNews(token = getAccessToken())
+        val startFrom = nextFrom
+
+        if (startFrom == null && feedPosts.isNotEmpty()) return feedPosts
+
+        val response = if (startFrom == null){
+            apiService.loadRecommendations(getAccessToken())
+        } else{
+            apiService.loadRecommendations(getAccessToken(), startFrom)
+        }
+        nextFrom = response.newsFeedContent.nextFrom
         val posts = mapper.mapResponseToPosts(response)
         _feedPosts.addAll(posts)
-        return posts
+        return feedPosts
     }
 
     private fun getAccessToken(): String {
@@ -46,11 +56,13 @@ class NewsFeedRepository(application: Application) {
                 postId = feedPost.id
             )
         }
+
         val newLikesCount = response.likes.count
         val newStatistics = feedPost.statistics.toMutableList().apply {
             removeIf { it.type == StatisticType.LIKES }
             add(StatisticItem(type = StatisticType.LIKES, newLikesCount))
         }
+
         val newPost = feedPost.copy(statistics = newStatistics, isLiked = !feedPost.isLiked)
         val postIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[postIndex] = newPost
