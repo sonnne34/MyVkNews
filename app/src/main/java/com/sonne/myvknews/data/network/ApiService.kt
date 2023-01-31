@@ -1,5 +1,6 @@
 package com.sonne.myvknews.data.network
 
+import com.sonne.myvknews.data.models.CommentsResponseDto
 import com.sonne.myvknews.data.models.LikesCountResponseDto
 import com.sonne.myvknews.data.models.NewsFeedResponseDto
 import retrofit2.http.GET
@@ -37,4 +38,11 @@ interface ApiService {
         @Query("owner_id") ownerId: Long,
         @Query("item_id") postId: Long,
     )
+
+    @GET("wall.getComments?v=5.131&extended=1&fields=photo_100")
+    suspend fun loadComments(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("post_id") postId: Long
+    ): CommentsResponseDto
 }

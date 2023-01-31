@@ -1,7 +1,9 @@
 package com.sonne.myvknews.data.mapper
 
 import android.util.Log
+import com.sonne.myvknews.data.models.CommentsResponseDto
 import com.sonne.myvknews.data.models.NewsFeedResponseDto
+import com.sonne.myvknews.domain.CommentsPost
 import com.sonne.myvknews.domain.FeedPost
 import com.sonne.myvknews.domain.StatisticItem
 import com.sonne.myvknews.domain.StatisticType
@@ -23,7 +25,7 @@ class NewsFeedMapper {
                 id = post.id,
                 communityId = post.communityId,
                 communityName = group.name,
-                publicationDate = mapTimestampToDate(post.date * 1000),
+                publicationDate = mapTimestampToDate(post.date),
                 communityImageUrl = group.imgUrl,
                 contentText = post.text,
                 contentImageUrl = post.attachments?.firstOrNull()?.photo?.photoUrls?.lastOrNull()?.url,
@@ -40,8 +42,28 @@ class NewsFeedMapper {
         return result
     }
 
+    fun mapResponseToComments(response: CommentsResponseDto): List<CommentsPost> {
+        val result = mutableListOf<CommentsPost>()
+        val comments = response.content.comments
+        val profiles = response.content.profiles
+        for (comment in comments) {
+            if (comment.text.isBlank()) continue
+            val author = profiles.firstOrNull { it.id == comment.authorId } ?: continue
+            val postComment = CommentsPost(
+                id = comment.id,
+                authorName = "${author.firstName} ${author.lastName}",
+                avatarAuthorUrl = author.avatarUrl,
+                commentText = comment.text,
+                publicationDate = mapTimestampToDate(comment.date)
+            )
+            result.add(postComment)
+        }
+
+        return result
+    }
+
     private fun mapTimestampToDate(timestamp: Long): String {
-        val date = Date(timestamp)
+        val date = Date(timestamp * 1000)
         return SimpleDateFormat("d MMMM yyyy, hh:mm", Locale.getDefault()).format(date)
     }
 }

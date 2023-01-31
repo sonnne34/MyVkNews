@@ -3,6 +3,7 @@ package com.sonne.myvknews.data.repository
 import android.app.Application
 import com.sonne.myvknews.data.mapper.NewsFeedMapper
 import com.sonne.myvknews.data.network.ApiFactory
+import com.sonne.myvknews.domain.CommentsPost
 import com.sonne.myvknews.domain.FeedPost
 import com.sonne.myvknews.domain.StatisticItem
 import com.sonne.myvknews.domain.StatisticType
@@ -28,9 +29,9 @@ class NewsFeedRepository(application: Application) {
 
         if (startFrom == null && feedPosts.isNotEmpty()) return feedPosts
 
-        val response = if (startFrom == null){
+        val response = if (startFrom == null) {
             apiService.loadRecommendations(getAccessToken())
-        } else{
+        } else {
             apiService.loadRecommendations(getAccessToken(), startFrom)
         }
         nextFrom = response.newsFeedContent.nextFrom
@@ -76,5 +77,14 @@ class NewsFeedRepository(application: Application) {
         val newPost = feedPost.copy(statistics = newStatistics, isLiked = !feedPost.isLiked)
         val postIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[postIndex] = newPost
+    }
+
+    suspend fun getComments(feedPost: FeedPost): List<CommentsPost> {
+        val comments = apiService.loadComments(
+            token = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        return mapper.mapResponseToComments(comments)
     }
 }
