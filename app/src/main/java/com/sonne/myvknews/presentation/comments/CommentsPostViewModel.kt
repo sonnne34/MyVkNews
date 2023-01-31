@@ -1,14 +1,17 @@
 package com.sonne.myvknews.presentation.comments
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.sonne.myvknews.domain.CommentsPost
+import android.app.Application
+import androidx.lifecycle.*
+import com.sonne.myvknews.data.repository.NewsFeedRepository
 import com.sonne.myvknews.domain.FeedPost
+import kotlinx.coroutines.launch
 
 class CommentsPostViewModel(
     feedPost: FeedPost,
-) : ViewModel() {
+    application: Application,
+) : AndroidViewModel(application) {
+
+    private val repository = NewsFeedRepository(application)
 
     private val _stateComments =
         MutableLiveData<CommentsPostScreenState>(CommentsPostScreenState.Initial)
@@ -19,14 +22,13 @@ class CommentsPostViewModel(
     }
 
     private fun loadCommentsPost(feedPost: FeedPost) {
-        val sourceList = mutableListOf<CommentsPost>().apply {
-            repeat(10) {
-                add(CommentsPost(id = it))
-            }
+        viewModelScope.launch {
+            val comments = repository.getComments(feedPost)
+            _stateComments.value = CommentsPostScreenState.Comments(
+                feedPost = feedPost,
+                comments = comments
+            )
         }
-        _stateComments.value = CommentsPostScreenState.Comments(
-            feedPost = feedPost,
-            comments = sourceList
-        )
+
     }
 }
